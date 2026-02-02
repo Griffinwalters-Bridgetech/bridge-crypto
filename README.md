@@ -170,7 +170,7 @@ It is not a product launch.
 
 If you are researching governance, execution risk, or irreversible systems and want to engage thoughtfully, reach out.
 
-**Bridge Technologies LLC**  
+**Bridge Technologies**  
 **99.97 Labs**
 
 ---
