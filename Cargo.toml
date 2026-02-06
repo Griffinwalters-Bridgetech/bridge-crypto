@@ -1,0 +1,7 @@
+[workspace]
+resolver = "2"
+members = [
+  "crates/iic-core",
+  "crates/iic-harness",
+  "crates/iic-witness",
+]

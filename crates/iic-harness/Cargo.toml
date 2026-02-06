@@ -1,0 +1,13 @@
+[package]
+name = "iic-harness"
+version = "0.1.0"
+edition = "2021"
+description = "Conformance harness for testing IIC properties"
+license = "MIT"
+
+[dependencies]
+iic-core = { path = "../iic-core" }
+
+[dev-dependencies]
+proptest = "1"
+iic-witness = { path = "../iic-witness" }

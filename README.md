@@ -1,178 +1,230 @@
 # Bridge Crypto
 
-### Pre-Execution Governance for Irreversible Systems
+## Inertial Integrity Constraint (IIC)
+### A Conformance Framework for Non-Obligatory Execution in Irreversible Systems
 
-Modern crypto systems are extraordinarily good at executing logic.
+Modern crypto systems are extraordinarily good at executing logic.  
 They are far less disciplined about deciding **whether execution should occur at all**.
 
-This repository introduces a foundational governance concept called the **Inertial Integrity Constraint (IIC)** and explores its application to crypto and Web3 systems.
+This repository defines, specifies, and *tests for* a foundational governance invariant called the **Inertial Integrity Constraint (IIC)**.
 
-This is a **conceptual scaffold**, not a protocol implementation.
+> **IIC is not a mechanism.**  
+> **It is not middleware.**  
+> **It is not a protocol pattern.**  
+>
+> **IIC is a property a system either has or lacks.**
+
+This repository exists to make that property **explicit, falsifiable, and testable**.
 
 ---
 
-## The Problem
+## The Invariant
 
 Most crypto systems operate under an implicit assumption:
 
-> **If a transaction or action is valid and formed, it should execute.**
+> **If an action is validly invoked, execution should follow.**
 
-This assumption optimized early systems for liveness and automation.
-At scale, in adversarial and high-value environments, it has become a structural vulnerability.
+That assumption optimized early systems for liveness and automation.  
+At scale—under adversarial pressure, high value, and irreversible outcomes—it becomes a structural vulnerability.
 
-Many of the most damaging failures in crypto history were not caused by invalid actions — but by **valid actions that should not have executed automatically**.
+The **Inertial Integrity Constraint (IIC)** names a different rule of reality:
 
-Examples include:
+> **Invocation does not imply obligation to execute.**  
+> **Non-execution must be a valid, terminal outcome.**
 
-* governance attacks executed within a single block,
-* flash-loan–driven state changes,
-* bridge exploits relying on "valid-looking" messages,
-* cascading liquidations triggered without holistic judgment.
-
-In each case, **non-execution was the correct outcome**, but the system had no way to represent that correctness.
-
----
-
-## The Core Idea: Inertial Integrity Constraint (IIC)
-
-**IIC is a pre-execution invariant**, not a rule, policy, or middleware.
-
-> **Invocation does not imply obligation to execute.**
-
-IIC does not:
-
-* decide which transactions are valid,
-* block execution,
-* pause the chain,
-* or introduce discretionary control.
-
-Instead, it constrains a deeper assumption:
-whether the system is allowed to *assume* that execution should proceed.
-
-Under IIC, **non-execution is a valid terminal state** in certain territory — especially where execution would otherwise occur simply because it can.
-
-IIC does not specify how that territory is detected — only that once detected, the assumption of continuation no longer holds.
+A system with IIC:
+- does **not** treat momentum as permission,
+- does **not** assume execution from invocation,
+- and does **not** treat "doing nothing" as an error state by default.
 
 ---
 
-## Governance vs. IIC (Stoplight Model)
+## What This Repository Is (and Is Not)
 
-Bridge distinguishes between two orthogonal concerns:
+This repository is **not** a smart-contract framework.  
+It does **not** provide enforcement logic or a canonical implementation of IIC.
 
-* **Governance** — governs *how* execution occurs once underway
-* **IIC** — governs *whether execution may be assumed at all*
+Instead, it provides three things:
 
-A helpful mental model:
+### 1. A Normative Specification
+Defined in `crates/iic-spec`, the spec formalizes IIC as a set of invariant clauses:
 
-* **GREEN** — execution is appropriate; IIC remains dormant
-* **YELLOW** — ambiguity exists; IIC is latent
-* **RED** — high risk, sovereignty, or irreversibility; IIC becomes salient
+- **IIC-1 — Non-Obligation**  
+  Invocation alone MUST NOT be sufficient evidence that execution will occur.
 
-In **RED** territory:
+- **IIC-2 — Valid Non-Execution**  
+  Non-execution MUST be representable as a valid, terminal system outcome.
 
-* execution is still possible,
-* but the **assumption of continuation is revoked**,
-* and non-execution becomes a *correct and complete outcome*.
+- **IIC-3 — Explicit Attestation**  
+  Only an explicit, checkable attestation may upgrade "invoked" to "will execute."
 
-IIC does not force stopping.
-It preserves the freedom **not to act** where action would otherwise be presumed.
-
----
-
-## Why an Invariant (Not Logic)
-
-In adversarial systems:
-
-* logic is optimized,
-* policy is gamed,
-* middleware is forked around.
-
-**Invariants survive.**
-
-Just as conservation of value or finality define what a crypto system *is*, IIC defines a system that does not privilege momentum over integrity.
-
-A system that violates IIC may still run the same code —
-but it is **structurally different** from one that embodies it.
-
-The difference is in what the system is permitted to assume, not in what it is permitted to do.
-
-IIC is not a rule the system follows. It is a property the system either has or lacks.
+These clauses define **what it means** for a system to *have* IIC—without prescribing *how* it must be implemented.
 
 ---
 
-## Existing Patterns (and What They Miss)
+### 2. A Conformance Harness
+Defined in `crates/iic-harness`, the harness provides **property tests** that ask a single question:
 
-Crypto already uses partial mitigations:
+> **Does this system exhibit the IIC invariant under examination?**
 
-* timelocks,
-* multisig,
-* circuit breakers,
-* mempools,
-* optimistic execution with challenge windows.
+The harness:
+- does **not** enforce behavior,
+- does **not** dictate architecture,
+- and does **not** encode policy.
 
-All of these introduce *delay* or *review*, but they still assume execution is the default outcome.
+It exists solely to make IIC **falsifiable**.
 
-IIC names what these patterns lack:
-
-> a principled way to treat **non-execution as correctness**, not failure.
-
-Validation success does not force continuation.
+A system may pass or fail the harness.  
+That result says nothing about *how* the system is built—only whether it exhibits the property.
 
 ---
 
-## Scope of This Repository
+### 3. A Witness Implementation (Non-Normative)
+Defined in `crates/iic-witness`, the witness is a **minimal, illustrative example** whose only purpose is to:
 
-This repository is intentionally **non-executable**.
+- demonstrate how the harness can be exercised,
+- provide a concrete target for tests,
+- and anchor abstract concepts in something executable.
 
-You will find:
+> **The witness is not "IIC."**  
+> It is one possible expression among many.
 
-* invariant definitions,
-* architectural framing,
-* historical failure analysis,
-* illustrative scenarios and diagrams.
-
-You will **not** find:
-
-* smart contracts,
-* enforcement logic,
-* protocol code,
-* or "stop" mechanisms.
-
-That absence is deliberate.
+It exists to prevent ambiguity—not to define the invariant.
 
 ---
 
-## Cross-Domain Relevance
+## Why This Structure Matters
 
-While crypto is the clearest domain for IIC due to irreversibility, the invariant generalizes to other systems:
+IIC is intentionally framed as an **invariant**, not a pattern.
 
-* AI inference (invocation ≠ obligation to respond),
-* autonomous agents,
-* governance automation.
+If IIC were delivered as:
+- a single contract,
+- a reusable library,
+- or a mandatory execution gate,
 
-This positions Bridge as **execution governance infrastructure**, not a single-domain solution.
+it would collapse from a property of systems into a feature of code.
+
+This repository avoids that failure mode by separating:
+- **specification** (what must be true),
+- **conformance** (how we test for truth),
+- and **witnesses** (examples, not definitions).
+
+The result is a framework that can be adopted, challenged, and extended—without being reduced.
+
+---
+
+## Repository Structure
+
+```
+bridge-crypto/
+├── Cargo.toml                    # Workspace root
+├── README.md                     # This file
+└── crates/
+    ├── iic-spec/
+    │   └── README.md             # Normative clauses (IIC-1/2/3)
+    ├── iic-core/
+    │   ├── Cargo.toml
+    │   └── src/lib.rs            # Traits + types (witness surface)
+    ├── iic-harness/
+    │   ├── Cargo.toml
+    │   ├── src/lib.rs            # Conformance checks
+    │   └── tests/conformance.rs  # Property tests
+    └── iic-witness/
+        ├── Cargo.toml
+        └── src/lib.rs            # Minimal witness implementation
+```
+
+---
+
+## Quick Start
+
+```bash
+# Clone the repo
+git clone https://github.com/Griffinwalters-Bridgetech/bridge-crypto.git
+cd bridge-crypto
+
+# Run the conformance tests
+cargo test
+```
+
+If the tests pass, the witness implementation exhibits IIC.
+
+To test your own system, implement the traits in `iic-core` and run the harness against your implementation.
+
+---
+
+## Portfolio Context: The Bridge Architecture
+
+`bridge-crypto` is one expression of a broader governance thesis shared across the Bridge portfolio.
+
+| Project | Domain | Core Function |
+|---------|--------|---------------|
+| **Bridge OS** | AI Governance | Enforces the `.03` Principle at the schema level — systems cannot complete autonomously |
+| **Bridge Crypto (IIC)** | Crypto Governance | Tests whether systems exhibit non-obligatory execution |
+| **Eyes Unseen** | Consumer Attention | Measures manipulation — engagement ≠ consent |
+| **DataPacks** | Knowledge Systems | Preserve expert judgment — extraction ≠ understanding |
+
+### The Shared Invariant
+
+Across domains, the same principle appears in different forms:
+
+| Expression | Domain | Invariant |
+|------------|--------|-----------|
+| `.03 Principle` | AI | Completion ≠ entitlement |
+| `IIC` | Crypto | Invocation ≠ obligation |
+| Attention Measurement | Consumer | Engagement ≠ consent |
+| DataPacks | Knowledge | Output ≠ understanding |
+
+These are not separate products.  
+They are **one governance architecture expressed in four domains**.
+
+If the same invariant holds across AI, crypto, attention, and knowledge systems, that is not a feature set.
+
+It is a claim about **how systems should relate to power, momentum, and human agency**.
+
+---
+
+## How to Use This Repository
+
+- **Protocol designers:** test whether your system assumes execution by default.
+- **Auditors:** identify whether non-execution is treated as a valid terminal state.
+- **Researchers:** explore invariant-level governance without prescribing implementation.
+- **Critics:** try to break the invariant—this repo is designed to allow that.
 
 ---
 
 ## Status
 
-This repository represents:
+This repository is intentionally early-stage and intentionally opinionated at the invariant level.
 
-* foundational research,
-* architectural IP,
-* and an invitation for serious discussion.
+Expect:
+- refinement of the spec language,
+- expansion of the harness,
+- additional witnesses in distinct contexts.
 
-It is not a product launch.
+Do **not** expect:
+- a "drop-in IIC contract,"
+- a universal execution gate,
+- or enforcement logic disguised as philosophy.
 
 ---
 
-## Contact / Collaboration
+## Related Repositories
 
-If you are researching governance, execution risk, or irreversible systems and want to engage thoughtfully, reach out.
+- [Bridge OS](https://github.com/Griffinwalters-Bridgetech/Bridge-os-governance) — AI governance API
+
+---
+
+## Contact
 
 **Bridge Technologies**  
 **99.97 Labs**
 
 ---
 
-*Bridge — governing execution before it becomes irreversible.*
+## Final Note
+
+IIC does not stop systems from acting.  
+It stops systems from *assuming they are entitled to act*.
+
+That distinction is the work.

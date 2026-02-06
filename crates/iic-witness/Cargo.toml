@@ -1,0 +1,9 @@
+[package]
+name = "iic-witness"
+version = "0.1.0"
+edition = "2021"
+description = "Minimal witness implementation for IIC conformance testing — NOT normative"
+license = "MIT"
+
+[dependencies]
+iic-core = { path = "../iic-core" }
